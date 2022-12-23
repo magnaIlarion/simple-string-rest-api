@@ -5,6 +5,7 @@ import ge.ibsu.demo.entities.Address;
 import ge.ibsu.demo.entities.Customer;
 import ge.ibsu.demo.repositories.Addressrepository;
 import ge.ibsu.demo.repositories.CustomerRepository;
+import ge.ibsu.demo.util.GeneralUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,13 +34,10 @@ public class CustomerService {
     }
 
     @Transactional
-    public Customer addCostumer(AddCustomerDTO addCustomerDTO)
-    {
+    public Customer addCostumer(AddCustomerDTO addCustomerDTO) throws Exception {
         Customer customer = new Customer();
 
-        customer.setFirstName(addCustomerDTO.getFirstName());
-        customer.setLastName(addCustomerDTO.getLastName());
-        customer.setEmail(addCustomerDTO.getEmail());
+        GeneralUtil.getCopyOf(addCustomerDTO, customer);
         customer.setCreateDate(new Date());
         customer.setActive(1);
 
@@ -56,9 +54,7 @@ public class CustomerService {
     {
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new Exception("Customer not found"));
 
-        customer.setFirstName(addCustomerDTO.getFirstName());
-        customer.setLastName(addCustomerDTO.getLastName());
-        customer.setEmail(addCustomerDTO.getEmail());
+        GeneralUtil.getCopyOf(addCustomerDTO, customer);
         customer.setCreateDate(new Date());
         customer.setActive(1);
         customer.getAddress().setAddress(addCustomerDTO.getAddress());
